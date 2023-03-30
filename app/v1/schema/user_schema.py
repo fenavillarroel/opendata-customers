@@ -20,10 +20,7 @@ class User(UserBase):
         ...,
         example="5"
     )
-    account_id: int = Field(
-        ...,
-        example=1
-    )
+    
 
 
 class UserRegister(UserBase):
@@ -32,4 +29,8 @@ class UserRegister(UserBase):
         min_length=8,
         max_length=64,
         example="strongpass"
+    )
+    account_id: int = Field(
+        ...,
+        example=1
     )

@@ -46,7 +46,7 @@ def show_tarifa(tarifa_id: int = Path(...),
     status_code=status.HTTP_200_OK,
     response_model=Tarifa,
     dependencies=[Depends(get_db)],
-    description="Create tafif"
+    description="Create tarifa"
 )
 def create(tarifa: TarifaBase = Body(...),
     current_user: User = Depends(get_current_user)):
