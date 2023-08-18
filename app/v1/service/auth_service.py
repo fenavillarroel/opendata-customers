@@ -9,6 +9,7 @@ from passlib.context import CryptContext
 
 from app.v1.model.user_model import Users as UserModel
 from app.v1.schema.token_schema import TokenData
+from app.v1.schema.user_schema import UserBase
 from app.v1.utils.settings import Settings
 
 settings = Settings()
@@ -32,14 +33,15 @@ def get_password_hash(password):
 
 
 def get_user(username: str):
-    return UserModel.filter((UserModel.email == username) | (UserModel.username == username)).first()
+    user = UserModel.filter((UserModel.email == username) | (UserModel.username == username)).first()
+    return user.mini_serialize()
 
 
 def authenticate_user(username: str, password: str):
     user = get_user(username)
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(password, user['password']):
         return False
     return user
 
@@ -65,7 +67,7 @@ def generate_token(username, password):
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     return create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user['username'], "account_id":user['account_id']}, expires_delta=access_token_expires
     )
 
 

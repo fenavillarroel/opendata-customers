@@ -11,3 +11,11 @@ class Users(peewee.Model):
 
   class Meta:
     database = db
+
+  def mini_serialize(self):
+    d = dict()
+    d['username'] = self.username
+    d['password'] = self.password
+    d['email'] = self.email
+    d['account_id'] = self.account_id.id
+    return d

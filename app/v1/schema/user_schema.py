@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from pydantic import Field
 from pydantic import EmailStr
 
-
 class UserBase(BaseModel):
     email: EmailStr = Field(
         ...,
