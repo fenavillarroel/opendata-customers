@@ -6,3 +6,4 @@ env
 .env
 .pytest_cache
 .python-version
+.idea

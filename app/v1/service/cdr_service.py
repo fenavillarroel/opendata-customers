@@ -9,10 +9,35 @@ settings = Settings()
 PER_PAGE = settings.per_page
 
 def get_all_cdrs(page: int, from_date: str, to_date: str, user_id: int = None):
-    if user_id:
-        cdrs = Cdr.select().where((Cdr.inicio >= from_date) & (Cdr.inicio <= to_date) & (Cdr.accountcode == str(user_id))).order_by(Cdr.id.desc()).paginate(page, PER_PAGE).dicts()
-    else:
-        cdrs = Cdr.select().where((Cdr.inicio >= from_date) & (Cdr.inicio <= to_date)).order_by(Cdr.id.desc()).paginate(page, PER_PAGE).dicts()
+    if user_id and page > 1:
+        cdrs = (Cdr
+                .select()
+                .where((Cdr.inicio >= from_date) & (Cdr.inicio <= to_date)
+                       & (Cdr.accountcode == str(user_id)))
+                .order_by(Cdr.id.desc())
+                .paginate(page, PER_PAGE)
+                .dicts())
+    elif user_id and page == 1:
+        cdrs = (Cdr
+                .select()
+                .where((Cdr.inicio >= from_date) & (Cdr.inicio <= to_date)
+                        & (Cdr.accountcode == str(user_id)))
+                .order_by(Cdr.id.desc())
+                .dicts())
+    elif not user_id and page > 1:
+        cdrs = (Cdr
+                .select()
+                .where((Cdr.inicio >= from_date) & (Cdr.inicio <= to_date))
+                .order_by(Cdr.id.desc())
+                .paginate(page, PER_PAGE)
+                .dicts())
+    elif not user_id and page == 1:
+        cdrs = (Cdr
+                .select()
+                .where((Cdr.inicio >= from_date) & (Cdr.inicio <= to_date))
+                .order_by(Cdr.id.desc())
+                .dicts())
+
     list_cdrs = []
     for cdr in cdrs:
         list_cdrs.append(
@@ -20,6 +45,7 @@ def get_all_cdrs(page: int, from_date: str, to_date: str, user_id: int = None):
                 id = cdr['id'],
                 accountcode = cdr['accountcode'],
                 ani = cdr['ani'],
+                destino = cdr['destino'],
                 inicio = cdr['inicio'],
                 answer = cdr['answer'],
                 fin = cdr['fin'],

@@ -6,6 +6,7 @@ class CdrBase(BaseModel):
     id: int
     accountcode: str
     ani: str
+    destino: str
     inicio: datetime
     answer: Optional[datetime]
     fin: Optional[datetime]
